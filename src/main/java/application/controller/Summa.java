@@ -28,7 +28,7 @@ public class Summa {
      * Тело запроса: {"a":550,"b":125}
      */
     @PostMapping(path="/find_summa", produces="application/json")
-    public ResponseEntity add_student(@RequestBody TwoNumbers body) {
+    public ResponseEntity fff_1(@RequestBody TwoNumbers body) {
         int a = body.a;
         int b = body.b;
         int c = a + b;
@@ -40,7 +40,7 @@ public class Summa {
      * Url запроса: http://localhost:5000/summa/find_summa?a=25&b=14&rnd=xxyyzz
      */
     @RequestMapping(value = "/find_summa", method = RequestMethod.GET)
-    public ResponseEntity get_name(@RequestParam(value="a") int a, @RequestParam(value="b") int b) {
+    public ResponseEntity fff_2(@RequestParam(value="a") int a, @RequestParam(value="b") int b) {
         int c = a + b;
         return ResponseEntity.ok(c);
     }
