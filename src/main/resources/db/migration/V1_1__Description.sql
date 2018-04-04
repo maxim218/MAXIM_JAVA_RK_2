@@ -5,3 +5,9 @@ CREATE TABLE sum_results
   b INTEGER,
   s INTEGER
 );
+
+CREATE TABLE people
+(
+  man_id SERIAL PRIMARY KEY,
+  man_name TEXT
+);
