@@ -2,9 +2,12 @@ package application.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 ///////////////////////////////////////////////////////////
 
@@ -17,8 +20,15 @@ import org.springframework.web.bind.annotation.*;
 ///////////////////////////////////////////////////////////
 
 class TwoNumbers {
+    TwoNumbers(int aa, int bb, int ss) {
+        a = aa;
+        b = bb;
+        s = ss;
+    }
+
     public int a = 0;
     public int b = 0;
+    public int s = 0;
 }
 
 @RestController
@@ -54,6 +64,9 @@ public class Summa {
 
 
     //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
 
     private NamedParameterJdbcTemplate template = null;
 
@@ -68,5 +81,27 @@ public class Summa {
         params.addValue("b", b);
         params.addValue("s", s);
         template.update("INSERT INTO sum_results (a, b, s) VALUES (:a,:b,:s);", params);
+    }
+
+    private RowMapper<TwoNumbers> RECORDS_MAPPER = (res, num) -> new TwoNumbers(
+            res.getInt("a"),
+            res.getInt("b"),
+            res.getInt("s")
+    );
+
+    public List<TwoNumbers> getMyRecords() {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        List<TwoNumbers> my_records_list = template.query("SELECT a, b, s FROM sum_results ORDER BY record_id DESC;", params, RECORDS_MAPPER);
+        return my_records_list;
+    }
+
+    /**
+     * Метод: GET
+     * Url: http://localhost:5000/summa/get_records?rnd=xxyyzz
+     */
+    @GetMapping(path="/get_records", produces="application/json")
+    public ResponseEntity fff_3() {
+        List <TwoNumbers> records = getMyRecords();
+        return ResponseEntity.ok(records);
     }
 }
